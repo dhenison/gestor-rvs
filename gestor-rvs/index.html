@@ -408,6 +408,17 @@
             <h1 style="color: white; margin: 0;">Diário de Frequência</h1>
         </div>
 
+        <!-- Painel de Sincronização Offline -->
+        <div class="card" style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f8fafc; border: 1px solid #e2e8f0;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div id="indicador-sync" style="width: 14px; height: 14px; border-radius: 50%; background-color: #10b981; box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);"></div>
+                <span id="texto-sync" style="font-weight: 500; color: #334155; font-size: 14px;">Tudo Sincronizado</span>
+            </div>
+            <button type="button" id="btn-forcar-sync" class="btn btn-secondary" style="background: white; border: 1px solid #cbd5e1; padding: 6px 12px; display: flex; align-items: center; gap: 5px; font-size: 13px;">
+                <span class="material-icons" style="font-size: 18px; color: #3b82f6;">sync</span> Sincronizar Agora
+            </button>
+        </div>
+
         <!-- Filtros -->
         <div class="card" style="margin-top: 20px;">
             <h3>Filtros de Chamada</h3>

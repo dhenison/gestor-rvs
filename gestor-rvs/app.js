@@ -1324,6 +1324,7 @@ function enfileirarOffline(url, data) {
     queue.push({ url, data, timestamp: new Date().toISOString() });
     localStorage.setItem('requestQueue', JSON.stringify(queue));
     console.warn("Modo Offline: Registro guardado no navegador.");
+    if (typeof updateSyncUI === 'function') updateSyncUI();
 }
 
 function syncQueue() {
@@ -1344,6 +1345,26 @@ function syncQueue() {
 
     localStorage.removeItem('requestQueue');
     alert(`Sincronizado ${queue.length} registros que estavam offline.`);
+    if (typeof updateSyncUI === 'function') updateSyncUI();
+}
+
+function updateSyncUI() {
+    const indicador = document.getElementById('indicador-sync');
+    const texto = document.getElementById('texto-sync');
+    if (!indicador || !texto) return;
+    
+    const queue = JSON.parse(localStorage.getItem('requestQueue') || '[]');
+    if (queue.length > 0) {
+        indicador.style.backgroundColor = '#ef4444';
+        indicador.style.boxShadow = '0 0 5px rgba(239, 68, 68, 0.5)';
+        texto.innerText = `Pendente: ${queue.length} Chamadas`;
+        texto.style.color = '#ef4444';
+    } else {
+        indicador.style.backgroundColor = '#10b981';
+        indicador.style.boxShadow = '0 0 5px rgba(16, 185, 129, 0.5)';
+        texto.innerText = 'Tudo Sincronizado';
+        texto.style.color = '#334155';
+    }
 }
 
 // --- Módulo Diário de Frequência ---
@@ -1368,6 +1389,27 @@ function buscarFrequenciaDaPlanilha() {
 }
 
 function initFrequenciaModule() {
+    if (typeof updateSyncUI === 'function') updateSyncUI();
+    
+    const btnForcarSync = document.getElementById('btn-forcar-sync');
+    if (btnForcarSync) {
+        btnForcarSync.addEventListener('click', () => {
+            if (!navigator.onLine) {
+                alert('Você está sem internet no momento. Conecte-se a uma rede para sincronizar.');
+                return;
+            }
+            const queue = JSON.parse(localStorage.getItem('requestQueue') || '[]');
+            if (queue.length === 0) {
+                alert('Tudo já está sincronizado!');
+                return;
+            }
+            btnForcarSync.innerHTML = '<span class="material-icons" style="font-size: 18px; color: #3b82f6;">sync</span> Sincronizando...';
+            syncQueue();
+            setTimeout(() => {
+                btnForcarSync.innerHTML = '<span class="material-icons" style="font-size: 18px; color: #3b82f6;">sync</span> Sincronizar Agora';
+            }, 1000);
+        });
+    }
     const selectTurno = document.getElementById('Freq_Turno');
     const selectTurma = document.getElementById('Freq_Turma');
     const inputData = document.getElementById('Freq_Data');
