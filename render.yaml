@@ -1,0 +1,22 @@
+services:
+  # Serviço 1: Backend em Python (Evolution API)
+  - type: web
+    name: gestor-rvs-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: EVOLUTION_API_URL
+        sync: false
+      - key: EVOLUTION_API_TOKEN
+        sync: false
+      - key: EVOLUTION_INSTANCE_NAME
+        sync: false
+
+  # Serviço 2: Frontend PWA
+  - type: web
+    name: gestor-rvs-frontend
+    env: static
+    buildCommand: ''
+    staticPublishPath: .
