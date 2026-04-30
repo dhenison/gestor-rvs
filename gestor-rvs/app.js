@@ -2355,6 +2355,17 @@ function initDashboardModule() {
                 temAlerta = true;
             }
 
+            // Gerar Alertas de Evasão (P na entrada e F na saída)
+            frequenciaDestaTurma.forEach(f => {
+                const isEvasao = f.Chamada_Entrada === 'P' && f.Chamada_Saida === 'F' && !f.Justificativa_Falta;
+                if (isEvasao) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `🚨 Evasão: Aluno(a) <strong>${f.Nome_Aluno}</strong> (Turma ${turma.Nome_Turma}) com presença na Entrada e falta na Saída.`;
+                    listaAlertas.appendChild(li);
+                    temAlerta = true;
+                }
+            });
+
             // Alimentar Tabela da Turma
             const porcentagemTurma = alunosDaTurma.length > 0 ? Math.round((presentesTurmaFinais / alunosDaTurma.length) * 100) : 0;
             const tr = document.createElement('tr');
